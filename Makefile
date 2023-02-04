@@ -6,9 +6,13 @@
 #    By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/23 13:22:35 by nadesjar          #+#    #+#              #
-#    Updated: 2023/01/29 00:06:34 by dracken24        ###   ########.fr        #
+#    Updated: 2023/02/04 13:31:42 by dracken24        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+VULKAN_SDK_PATH			= /home/dracken24/Documents/Vulkan/x86_64
+STB_INCLUDE_PATH		= /home/dracken24/Documents/myPackages/stb
+TINYOBJ_INCLUDE_PATH 	= /home/dracken24/Documents/myPackages/vcpkg/packges/tinyobjloader_x64-linux
 
 P_OBJS 			= ./objs/
 P_SRCS			= ./srcs/
@@ -17,16 +21,14 @@ P_CLASS			= ./srcs/class/
 FILES			= $(P_SRCS)main.cpp \
 				$(P_CLASS)_ProgramGestion.cpp \
 
-VULKAN_SDK_PATH = /home/dracken24/Documents/Vulkan/x86_64
-
 OBJS			= $(patsubst $(P_SRCS)%.cpp, $(P_OBJS)%.o, $(FILES))
 
 CC				= c++
 
-CFLAGS			= -std=c++17 -I$(VULKAN_SDK_PATH)/include \
+CFLAGS			= -std=c++17 -g -I$(VULKAN_SDK_PATH)/include -I$(STB_INCLUDE_PATH) -I$(TINYOBJ_INCLUDE_PATH) \
 				-Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable
 				
-LDFLAGS 		= -L$(VULKAN_SDK_PATH)/lib `pkg-config --static --libs glfw3` -lvulkan
+LDFLAGS 		= -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 
 NAME			= Scop
 
@@ -46,7 +48,7 @@ $(P_OBJS)%.o:	$(P_SRCS)%.cpp
 # --------------------------------- Execute ---------------------------------- #
 
 execute:
-	@./$(NAME)
+	@./$(NAME) ./meshs/test.obj ./textures/viking_room.png
 
 # ----------------------------------- Git ------------------------------------ #
 
@@ -66,7 +68,7 @@ msg_out:
 signat:
 	@echo "$G\n\|/~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~\|/"
 	@echo " |             ---------------------------------------------             |"
-	@echo " |             *--*   $LPROJET: Scop      PAR: NADESJAR$G   *--*             |"
+	@echo " |             *--*    $LPROJET: Scop    PAR: NADESJAR$G    *--*             |"
 	@echo " |             ---------------------------------------------             |"
 	@echo "/|\~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~/|\ \n$W"
 	
