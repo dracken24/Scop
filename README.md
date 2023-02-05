@@ -46,6 +46,20 @@
     *Exécuter des commandes qui s'appuient sur l'image acquise
     *Présentez cette image à l'écran pour la présentation, en la renvoyant à la chaîne d'échange
 
+
+
+----------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------
+ETAPES:
+------------------------------------------------------
+
+-La première chose à faire avec Vulkan est son initialisation au travers d'une instance.
+
+-Cree la surface pour communique avec la window. La surface de fenêtre doit être créée juste après l'instance
+    car elle peut influencer le choix du physical device.
+
+
+
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------
 NOTE:
@@ -56,6 +70,8 @@ Comme on a pu le voir dans les en-têtes de certaines fonctions, il est possible
 
 layout(set = 0, binding = 0) uniform UniformBufferObject { ... }
 Vous pouvez utiliser cette possibilité pour placer dans différents sets les descripteurs dépendant d'objets et les descripteurs partagés. De cette manière vous éviter de relier constemment une partie des descripteurs, ce qui peut être plus performant.
+
+
 
 ----------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------

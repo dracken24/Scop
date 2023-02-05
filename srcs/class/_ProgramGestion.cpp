@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 22:20:08 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/04 22:29:25 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/05 11:13:42 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ float	ProgramGestion::deltaTime(void)
 	return (deltaTime);
 }
 
-ProgramGestion::Vector2	ProgramGestion::getImgSize(const char *path)
+Vector2	ProgramGestion::getImgSize(const char *path)
 {
     int width;
     int height;

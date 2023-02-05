@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 21:53:06 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/04 22:28:45 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/05 11:12:59 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,40 @@ struct UniformBufferObject
 	alignas(16)glm::mat4 proj;
 };
 
+typedef struct  Vector3
+{
+	float	x;
+	float	y;
+	float	z;
+}               Vector3;
+
+typedef struct  Vector2
+{
+	float	x;
+	float	y;
+}               Vector2;
+
+typedef struct  Texture2D
+{
+	std::string		imgPath;
+	std::string		imgName;
+	Vector2			imgSize;
+
+	std::string		imgType;
+}               Texture2D;
+
+typedef struct  Obj
+{
+	std::string		objPath;
+	std::string		objName;
+}               Obj;
+
+typedef struct		Rotate
+{
+	Vector3        axis;
+	float          angle;
+}					Rotate;
+
 //******************************************************************************************************//
 
 class ProgramGestion
@@ -163,45 +197,6 @@ class ProgramGestion
 	//												Structs										    		//
 	//******************************************************************************************************//
 	public:
-		typedef struct  Vector3
-		{
-			float	x;
-			float	y;
-			float	z;
-		}               Vector3;
-
-		typedef struct  Vector2
-		{
-			float	x;
-			float	y;
-		}               Vector2;
-
-		typedef struct  Texture2D
-		{
-			std::string		imgPath;
-			std::string		imgName;
-			Vector2			imgSize;
-
-			std::string		imgType;
-		}               Texture2D;
-
-		typedef struct  Obj
-		{
-			std::string		objPath;
-			std::string		objName;
-		}               Obj;
-		
-		// typedef struct  TextObjs
-		// {
-		// 	Texture2D	texture;
-		// 	Obj			obj;
-		// }               TextObjs;
-
-		typedef struct		Rotate
-		{
-			Vector3        axis;
-			float          angle;
-		}					Rotate;
 
 		// Queue family indices //
 		struct QueueFamilyIndices

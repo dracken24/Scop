@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 17:55:55 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/04 22:28:38 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/05 11:11:52 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,57 +256,40 @@ int	events(GLFWwindow *window)
 
 void	drop_callback(GLFWwindow* window, int count, const char** paths)
 {
-	ProgramGestion::Texture2D   texture;
-	ProgramGestion::Obj   		obj;
-
     // std::cout << "Dropped " << count << std::endl;
     for (int it = 0; it < count; it++)
     {
-		// std::cout << "Path: " << paths[it] << std::endl;
-        if (strrchr(paths[it], '.') != NULL)
-        {
-            if (strcmp(strrchr(paths[it], '.'), ".obj") == 0)
-            {
-                obj.objPath = paths[it];
-                obj.objName = strrchr(paths[it], '/');
-            }
-            else if (strcmp(strrchr(paths[it], '.'), ".png") == 0 || strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
-            {
-                texture.imgPath = paths[it];
-                texture.imgName = strrchr(paths[it], '/');
-				if (strcmp(strrchr(paths[it], '.'), ".png") == 0)
-                	texture.imgType = "png";
-				else if (strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
-					texture.imgType = "jpg";
-                texture.imgSize = app.getImgSize(paths[it]);
-            }
+
+		if (strcmp(strrchr(paths[it], '.'), ".obj") == 0)
+		{
+			app._obj.push_back({paths[it], strrchr(paths[it], '/')});
+		}
+		else if (strcmp(strrchr(paths[it], '.'), ".png") == 0 || strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
+		{
+			std::string tmp;
+			if (strcmp(strrchr(paths[it], '.'), ".png") == 0)
+				tmp = "png";
+			else if (strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
+				tmp = "jpg";
 			
-			if (texture.imgPath != "")
-			{
-				app._textures.push_back(texture);
-				texture.imgPath = "";
-			}
-			else if (obj.objPath != "")
-			{
-				app._obj.push_back(obj);
-				obj.objPath = "";
-			}
-        }
+			app._textures.push_back({paths[it], strrchr(paths[it], '/'), app.getImgSize(paths[it]), tmp});
+		}
         else
-            std::cout << "Error: File type not supported" << std::endl;
+            std::cout << RED << "Error: File type not supported: " << paths[it] << RESET << std::endl;
     }
 	
 	if (app._obj.size() > 0)
 	{
+		std::cout << "\n-----------------------------------------------------------------" << std::endl;
 		for (int k = 0; k < app._obj.size(); k++)
 		{
 			std::cout << YELLOW << "\nDropped Obj Name  [" << k << "]  : " << app._obj[k].objName << std::endl;
 			std::cout << "Dropped Obj Path  [" << k << "]  : " << app._obj[k].objPath << std::endl << std::endl;
 		}
-		std::cout << "-----------------------------------------------------------------" << std::endl;
 	}
 	if (app._textures.size() > 0)
 	{
+		std::cout << "-----------------------------------------------------------------" << std::endl;
 		for (int k = 0; k < app._textures.size(); k++)
 		{
 			std::cout << YELLOW << "\nDropped Img Name  [" << k << "]  : " << app._textures[k].imgName << std::endl;
