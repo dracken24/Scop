@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 22:20:08 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/04 15:11:09 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/04 22:29:25 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@
 #include <tiny_obj_loader.h>
 
 #include "../../includes/class/_ProgramGestion.hpp"
-#include "../../includes/engine.hpp"
+// #include "../../includes/engine.hpp"
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL	debugCallback(VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 	VkDebugUtilsMessageTypeFlagsEXT messageType, const VkDebugUtilsMessengerCallbackDataEXT *pCallbackData, void *pUserData);
 
 int		keyPress(GLFWwindow *window);
 float	deltaTime(void);
-
 
 extern ProgramGestion app;
 
@@ -84,29 +83,6 @@ void		ProgramGestion::setDeltaTime(float deltaTime, int flag)
 float		ProgramGestion::getDeltaTime(void) const
 {
 	return _deltaTime;
-}
-
-//******************************************************************************************************//
-//												Init										    		//
-//******************************************************************************************************//
-
-void	ProgramGestion::initVariables(int argc, char **argv)
-{
-	_deltaTime = 0.0f;
-	
-	app._translate.x = 0.0f;
-	app._translate.y = 0.0f;
-	app._translate.z = 0.0f;
-	app._rotate.x = 0.0f;
-	app._rotate.y = 0.0f;
-	app._rotate.z = 0.0f;
-
-	app._scale.x = 1.0f;
-	app._scale.y = 1.0f;
-	app._scale.z = 1.0f;
-
-	MODEL_PATH = argv[1];
-	TEXTURE_PATH = argv[2];
 }
 
 //******************************************************************************************************//
@@ -179,7 +155,7 @@ void ProgramGestion::cleanup()
 	glfwDestroyWindow(window);
 
 	glfwTerminate();
-	std::cout << GREEN << "Vulkan resources cleaned up, success" << RESET << std::endl;
+	std::cout << GREEN << '\n' <<  "Vulkan resources cleaned up, success" << RESET << std::endl << std::endl;
 }
 
 //******************************************************************************************************//
@@ -241,7 +217,7 @@ void ProgramGestion::mainLoop()
 	{
 		glfwPollEvents();
 
-		keyPress(window);
+		events(window);
 		
 		drawFrame();
 		
@@ -282,6 +258,25 @@ float	ProgramGestion::deltaTime(void)
 	lastFrame = currentFrame;
 	
 	return (deltaTime);
+}
+
+ProgramGestion::Vector2	ProgramGestion::getImgSize(const char *path)
+{
+    int width;
+    int height;
+    int channels;
+    unsigned char *data = stbi_load(path, &width, &height, &channels, 0);
+    
+    if (data)
+    {
+        stbi_image_free(data);
+        return (Vector2{static_cast<float>(width), static_cast<float>(height)});
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+        return (Vector2{0, 0});
+    }
 }
 
 //******************************************************************************************************//
@@ -1119,7 +1114,7 @@ VkShaderModule ProgramGestion::createShaderModule(const std::vector<char> &code)
 }
 
 // Read a file and return a vector of char //
-static std::vector<char> readFile(const std::string &filename)
+std::vector<char> ProgramGestion::readFile(const std::string &filename)
 {
 	std::ifstream file(filename, std::ios::ate | std::ios::binary);
 

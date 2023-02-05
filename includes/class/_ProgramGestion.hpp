@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 21:53:06 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/04 15:18:23 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/04 22:28:45 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,48 +162,69 @@ class ProgramGestion
 	//******************************************************************************************************//
 	//												Structs										    		//
 	//******************************************************************************************************//
-
-	typedef struct  Vector3
-	{
-		float	x;
-		float	y;
-		float	z;
-	}               Vector3;
-
-	typedef struct  Vector2
-	{
-		float	x;
-		float	y;
-	}               Vector2;
-
-	typedef struct		Rotate
-	{
-		Vector3        axis;
-		float           angle;
-	}					Rotate;
-
-	// Queue family indices //
-	struct QueueFamilyIndices
-	{
-		std::optional<uint32_t>		graphicsFamily;
-		std::optional<uint32_t>		presentFamily;
-		
-		bool isComplete()
+	public:
+		typedef struct  Vector3
 		{
-			return graphicsFamily.has_value() && presentFamily.has_value();
-		}
-	};
+			float	x;
+			float	y;
+			float	z;
+		}               Vector3;
 
-	// Swap chain support details //
-	struct SwapChainSupportDetails
-	{
-		VkSurfaceCapabilitiesKHR capabilities;
-		std::vector<VkSurfaceFormatKHR> formats;
-		std::vector<VkPresentModeKHR> presentModes;
-	};
+		typedef struct  Vector2
+		{
+			float	x;
+			float	y;
+		}               Vector2;
 
-	// Uniform buffer square object contnant 2 triangles //
-	std::vector<Vertex> vertices;
+		typedef struct  Texture2D
+		{
+			std::string		imgPath;
+			std::string		imgName;
+			Vector2			imgSize;
+
+			std::string		imgType;
+		}               Texture2D;
+
+		typedef struct  Obj
+		{
+			std::string		objPath;
+			std::string		objName;
+		}               Obj;
+		
+		// typedef struct  TextObjs
+		// {
+		// 	Texture2D	texture;
+		// 	Obj			obj;
+		// }               TextObjs;
+
+		typedef struct		Rotate
+		{
+			Vector3        axis;
+			float          angle;
+		}					Rotate;
+
+		// Queue family indices //
+		struct QueueFamilyIndices
+		{
+			std::optional<uint32_t>		graphicsFamily;
+			std::optional<uint32_t>		presentFamily;
+			
+			bool isComplete()
+			{
+				return graphicsFamily.has_value() && presentFamily.has_value();
+			}
+		};
+
+		// Swap chain support details //
+		struct SwapChainSupportDetails
+		{
+			VkSurfaceCapabilitiesKHR capabilities;
+			std::vector<VkSurfaceFormatKHR> formats;
+			std::vector<VkPresentModeKHR> presentModes;
+		};
+
+		// Uniform buffer square object contnant 2 triangles //
+		std::vector<Vertex> vertices;
 
 	//******************************************************************************************************//
 	//												Functions									    		//
@@ -230,13 +251,7 @@ class ProgramGestion
 		void		drawFrame();
 		void		useFPS(void);
 		void		setFPS(int fps);
-
-		// void		drawPixel(VkDevice device, VkQueue queue, VkCommandPool commandPool,
-		// 				VkRenderPass renderPass, VkFramebuffer framebuffer, VkExtent2D extent,
-		// 					uint32_t x, uint32_t y, VkClearValue clearColor, VkDeviceMemory deviceMemory,
-		// 						VkBuffer vertexBuffer);
-
-		
+	
 		void		cleanup();
 
 	// Draw //
@@ -247,16 +262,9 @@ class ProgramGestion
 
 	// Getters//
 		float			getDeltaTime() const;
-		
-		// VkDevice		getDevice() const;
-		// VkQueue			getGraphicsQueue() const;
-		// VkQueue			getPresentQueue() const;
-		// VkCommandPool	getCommandPool() const;
-		// VkRenderPass	getRenderPass() const;
-		// VkFramebuffer	getSwapChainFramebuffer() const;
-		// VkExtent2D		getSwapChainExtent() const;
-		// VkDeviceMemory	getDeviceMemory() const;
-		// VkBuffer		getVertexBuffer() const;
+
+	// Others //
+		Vector2		getImgSize(const char *path);
 
 	// Init //
 		void		initVariables(int argc, char **argv);
@@ -427,6 +435,7 @@ class ProgramGestion
 	//												Others										    		//
 	//******************************************************************************************************//
 
+		std::vector<char> readFile(const std::string &filename);
 		float		deltaTime(void);
 	
 	//******************************************************************************************************//
@@ -440,6 +449,7 @@ class ProgramGestion
 		float							_zoom = 45.0f;
 		Vector3							_translate = {0.0f, 0.0f, 0.0f};
 		Vector3							_scale = {1.0f, 1.0f, 1.0f};
+		Vector2							_mousePos = {0.0f, 0.0f};
 
 		GLFWwindow						*window;	//- Stock window -//
 		
@@ -467,6 +477,9 @@ class ProgramGestion
 
 		std::string MODEL_PATH_DROP;
 		std::string TEXTURE_PATH_DROP;
+
+		std::vector<Texture2D>	_textures;
+		std::vector<Obj> 		_obj;
 	
 	// Private Attributes //
 	private:
@@ -539,5 +552,14 @@ class ProgramGestion
 		
 		float							_deltaTime = 0.0f;
 };
+
+void	key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void	mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void	scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void	drop_callback(GLFWwindow* window, int count, const char** paths);
+void	resetTransform(void);
+void	onKeyPress(void);
+
+int		events(GLFWwindow *window);
 
 #endif
