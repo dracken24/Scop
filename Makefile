@@ -6,7 +6,7 @@
 #    By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/23 13:22:35 by nadesjar          #+#    #+#              #
-#    Updated: 2023/02/05 10:33:58 by dracken24        ###   ########.fr        #
+#    Updated: 2023/02/05 15:30:28 by dracken24        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ P_SRCS			= ./srcs/
 P_CLASS			= ./srcs/class/
 
 FILES			= $(P_SRCS)main.cpp \
+				$(P_SRCS)commands.cpp \
 				$(P_CLASS)_ProgramGestion.cpp \
 				$(P_CLASS)_PublicFunctions.cpp \
 

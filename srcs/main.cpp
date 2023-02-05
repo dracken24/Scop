@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 22:14:08 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/04 22:28:57 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/05 15:42:17 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,39 @@
 
 ProgramGestion app;
 
+// Thread to choose texture //
+void	threadChooseTexture()
+{
+	if (app._thread == true && app._quit == true)
+	{
+		// std::cout << "Thread" << std::endl;
+		std::thread	chooseTextureThread(std::bind(&ProgramGestion::chooseTexture, &app));
+		chooseTextureThread.detach();
+		app._thread = false;
+	}
+	if (app._texture == true)
+	{
+		// std::cout << "Texture" << std::endl;
+		app.changeTexture(app._textures.at(app._textureIndex));
+		app._texture = false;
+		app._thread = true;
+	}
+}
+
 void mainLoop()
 {
 	while (app._quit == true && glfwWindowShouldClose(app.window) != true)
 	{
 		glfwPollEvents();
 
-		events(app.window);
-		onKeyPress();
+		events(app.window);		// Events //
+		onKeyPress();			// Key gestion //
+
+		threadChooseTexture();	// Thread to choose texture //
 		
-		app.drawFrame();
+		app.drawFrame();		// Draw on screen //
         
-        app.useFPS();
+        app.useFPS();			// FPS gestion //
 	}
 }
 

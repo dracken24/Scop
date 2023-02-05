@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 21:53:06 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/05 11:12:59 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/05 15:51:56 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -387,7 +387,7 @@ class ProgramGestion
 		void			transitionImageLayout(VkImage image, VkFormat format,
 							VkImageLayout oldLayout, VkImageLayout newLayout, uint32_t mipLevels);
 		void			copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
-		void			createTextureImage();
+		void			createTextureImage(Texture2D texture);
 		void			endSingleTimeCommands(VkCommandBuffer commandBuffer);
 		VkCommandBuffer	beginSingleTimeCommands();
 
@@ -430,8 +430,13 @@ class ProgramGestion
 	//												Others										    		//
 	//******************************************************************************************************//
 
-		std::vector<char> readFile(const std::string &filename);
-		float		deltaTime(void);
+		std::vector<char>	readFile(const std::string &filename);
+		float				deltaTime(void);
+
+	public:
+		void 	changeTexture(Texture2D	texture);
+		void	chooseTexture();
+		void	changeMesh(Obj mesh);
 	
 	//******************************************************************************************************//
 	//												Variables									    		//
@@ -467,14 +472,19 @@ class ProgramGestion
 		
 		uint							_space = 0;
 
-		std::string MODEL_PATH;
-		std::string TEXTURE_PATH;
+		Texture2D						_defaultTexture;
 
-		std::string MODEL_PATH_DROP;
-		std::string TEXTURE_PATH_DROP;
+		std::string MODEL_PATH;
+		// std::string TEXTURE_PATH;
+
+		// std::string MODEL_PATH_DROP;
+		// std::string TEXTURE_PATH_DROP;
 
 		std::vector<Texture2D>	_textures;
 		std::vector<Obj> 		_obj;
+		bool					_texture = false;
+		int						_textureIndex = 0;
+		bool					_thread = true;
 	
 	// Private Attributes //
 	private:
@@ -550,6 +560,7 @@ class ProgramGestion
 
 void	key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void	mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void	cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 void	scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void	drop_callback(GLFWwindow* window, int count, const char** paths);
 void	resetTransform(void);

@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 22:20:08 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/05 11:13:42 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/05 15:19:50 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,8 @@ void ProgramGestion::cleanup()
 
 	glfwTerminate();
 	std::cout << GREEN << '\n' <<  "Vulkan resources cleaned up, success" << RESET << std::endl << std::endl;
+
+	exit(EXIT_SUCCESS);
 }
 
 //******************************************************************************************************//
@@ -179,10 +181,10 @@ void ProgramGestion::initWindow(std::string name)
 void ProgramGestion::initVulkan()
 {
 	createInstance(); // Create Vulkan instance //
-	setupDebugMessenger();
+	setupDebugMessenger();	// Create debug messenger //
 	createSurface();	  // Create surface for communication with selected GPU //
 	pickPhysicalDevice(); // Select GPU //
-	createLogicalDevice();
+	createLogicalDevice();	
 	createSwapChain();
 	createImageViews();
 	createRenderPass();
@@ -192,7 +194,7 @@ void ProgramGestion::initVulkan()
 	createColorResources();
 	createDepthResources();
 	createFramebuffers();
-	createTextureImage();
+	createTextureImage(_defaultTexture);
 	createTextureImageView();
 	createTextureSampler();
 	loadModel();
@@ -1764,14 +1766,16 @@ void	ProgramGestion::createDescriptorSets()
 //											Texture mapping									    		//
 //******************************************************************************************************//
  
-void	ProgramGestion::createTextureImage()
+void	ProgramGestion::createTextureImage(Texture2D texture)
 {
 	// Load the image //
 	int texWidth, texHeight, texChannels;
     // stbi_uc* 		pixels = stbi_load("srcs/textures/ichigo.png", &texWidth, &texHeight,
 	// 							&texChannels, STBI_rgb_alpha);
-	stbi_uc	*pixels = stbi_load(TEXTURE_PATH.c_str(), &texWidth, &texHeight,
-						&texChannels, STBI_rgb_alpha);
+	texWidth = static_cast<int>(texture.imgSize.x);
+	texHeight = static_cast<int>(texture.imgSize.y);
+	
+	stbi_uc	*pixels = stbi_load(texture.imgPath.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     VkDeviceSize	imageSize = texWidth * texHeight * 4;
 	mipLevels = static_cast<uint32_t>(std::floor(std::log2(std::max(texWidth, texHeight)))) + 1;
 

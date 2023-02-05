@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 17:55:55 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/05 11:11:52 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/05 15:58:43 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,215 +33,37 @@ void	ProgramGestion::initVariables(int argc, char **argv)
 	app._scale.y = 1.0f;
 	app._scale.z = 1.0f;
 
+	for (int it = 0; it < argc ; it++)
+	{
+		if (strcmp(strrchr(argv[it], '.'), ".png") == 0 || strcmp(strrchr(argv[it], '.'), ".jpg") == 0)
+		{
+			std::string tmp;
+			if (strcmp(strrchr(argv[it], '.'), ".png") == 0)
+				tmp = "png";
+			else if (strcmp(strrchr(argv[it], '.'), ".jpg") == 0)
+				tmp = "jpg";
+
+			app._textures.push_back({argv[it], strrchr(argv[it], '/'), app.getImgSize(argv[it]), tmp});
+			
+			_defaultTexture.imgName = strrchr(argv[it], '/');
+			_defaultTexture.imgPath = argv[it];
+			_defaultTexture.imgSize = app.getImgSize(argv[it]);
+			_defaultTexture.imgType = tmp;
+		}
+		else if (strcmp(strrchr(argv[it], '.'), ".obj") != 0)
+			std::cout << RED << "Error: File type not supported: " << argv[it] << RESET << std::endl;
+		
+	}
+	
+
 	MODEL_PATH = argv[1];
-	TEXTURE_PATH = argv[2];
+	// TEXTURE_PATH = argv[2];
 }
 
 //******************************************************************************************************//
-//										 	Gestion GPU								  		    		//
+//										 		Gestion								  		    		//
 //******************************************************************************************************//
 
-void	resetTransform(void)
-{
-	app._translate.x = 0.0f;
-	app._translate.y = 0.0f;
-	app._translate.z = 0.0f;
-	app._rotate.x = 0.0f;
-	app._rotate.y = 0.0f;
-	app._rotate.z = 0.0f;
-
-	app._scale.x = 1.0f;
-	app._scale.y = 1.0f;
-	app._scale.z = 1.0f;
-}
-
-void	onKeyPress(void)
-{
-	// Rotate //
-	if (app._a == 1)
-		app._rotate.x -= 2.0f;
-	if (app._d == 1)
-		app._rotate.x += 2.0f;
-		
-	if (app._w == 1)
-		app._rotate.y -= 2.0f;
-	if (app._s == 1)
-		app._rotate.y += 2.0f;
-		
-	if (app._q == 1)
-		app._rotate.z -= 2.0f;
-	if (app._e == 1)
-		app._rotate.z += 2.0f;
-
-	// Translate //
-	if (app._up == 1)
-		app._translate.z += 0.025f;
-	if (app._down == 1)
-		app._translate.z -= 0.025f;
-		
-	if (app._left == 1)
-	{
-		app._translate.x += 0.025f;
-		app._translate.y -= 0.025f;
-	}
-	if (app._right == 1)
-	{
-		app._translate.x -= 0.025f;
-		app._translate.y += 0.025f;
-	}
-
-	// Reset //
-	if (app._space == 1)
-		resetTransform();
-}
-
-void	key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	// std::cout << "Key pressed: " << key << std::endl;
-	
-	switch (key)
-	{
-		// Rotate //	
-		case GLFW_KEY_A:
-			if (action == GLFW_PRESS)
-				app._a = 1;
-			else if (action == GLFW_RELEASE)
-				app._a = 0;
-			break;
-		case GLFW_KEY_D:
-			if (action == GLFW_PRESS)
-				app._d = 1;
-			else if (action == GLFW_RELEASE)
-				app._d = 0;
-			break;
-			
-		case GLFW_KEY_W:
-			if (action == GLFW_PRESS)
-				app._w = 1;
-			else if (action == GLFW_RELEASE)
-				app._w = 0;
-			break;
-		case GLFW_KEY_S:
-			if (action == GLFW_PRESS)
-				app._s = 1;
-			else if (action == GLFW_RELEASE)
-				app._s = 0;
-			break;
-			
-		case GLFW_KEY_Q:
-			if (action == GLFW_PRESS)
-				app._q = 1;
-			else if (action == GLFW_RELEASE)
-				app._q = 0;
-			break;
-		case GLFW_KEY_E:
-			if (action == GLFW_PRESS)
-				app._e = 1;
-			else if (action == GLFW_RELEASE)
-				app._e = 0;
-			break;
-			
-		// Translate //	
-		case GLFW_KEY_UP:
-			if (action == GLFW_PRESS)
-				app._up = 1;
-			else if (action == GLFW_RELEASE)
-				app._up = 0;
-			break;
-		case GLFW_KEY_DOWN:
-			if (action == GLFW_PRESS)
-				app._down = 1;
-			else if (action == GLFW_RELEASE)
-				app._down = 0;
-			break;
-			
-		case GLFW_KEY_LEFT:
-			if (action == GLFW_PRESS)
-				app._left = 1;
-			else if (action == GLFW_RELEASE)
-				app._left = 0;
-			break;
-		case GLFW_KEY_RIGHT:
-			if (action == GLFW_PRESS)
-				app._right = 1;
-			else if (action == GLFW_RELEASE)
-				app._right = 0;
-			break;
-
-		// Reset //
-		case GLFW_KEY_SPACE:
-			if (action == GLFW_PRESS)
-				app._space = 1;
-			else if (action == GLFW_RELEASE)
-				app._space = 0;
-			break;
-
-		// Exit //
-		case GLFW_KEY_ESCAPE:
-			if (action == GLFW_PRESS)
-				app._quit = false;
-			break;
-	}
-}
-
-void	mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-{
-	// std::cout << "Mouse button pressed: " << button << std::endl;
-	// std::cout << "Mouse button action : " << action << std::endl;
-	// std::cout << "Mouse button mods   : " << mods << std::endl;
-	
-	switch (button)
-	{
-		case GLFW_MOUSE_BUTTON_LEFT:
-			if (action == GLFW_PRESS)
-				app._mouseLeft = 1;
-			else if (action == GLFW_RELEASE)
-				app._mouseLeft = 0;
-			break;
-		case GLFW_MOUSE_BUTTON_RIGHT:
-			if (action == GLFW_PRESS)
-				app._mouseRight = 1;
-			else if (action == GLFW_RELEASE)
-				app._mouseRight = 0;
-			break;
-		case GLFW_MOUSE_BUTTON_MIDDLE:
-			if (action == GLFW_MOUSE_BUTTON_MIDDLE)
-				app._mouseMiddle = 1;
-			else if (action == GLFW_RELEASE)
-				app._mouseMiddle = 0;
-			break;
-	}
-	std::cout << std::endl;
-}
-
-void	scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	// std::cout << "Scroll xoffset: " << xoffset << std::endl;
-	// std::cout << "Scroll yoffset: " << yoffset << std::endl;
-
-	if (yoffset == 1)
-	{
-		app._scale.x += 0.1f;
-		app._scale.y += 0.1f;
-		app._scale.z += 0.1f;
-	}
-	else if (yoffset == -1)
-	{
-		app._scale.x -= 0.1f;
-		app._scale.y -= 0.1f;
-		app._scale.z -= 0.1f;
-	}
-}
-
-// Find position of the mouse on screen //
-void	cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
-{
-	// std::cout << "Cursor x: " << xpos << std::endl;
-	// std::cout << "Cursor y: " << ypos << std::endl;
-	
-	app._mousePos.x = static_cast<float>(xpos);
-	app._mousePos.y = static_cast<float>(ypos);
-}
 
 int	events(GLFWwindow *window)
 {
@@ -254,30 +76,8 @@ int	events(GLFWwindow *window)
 	return (0);
 }
 
-void	drop_callback(GLFWwindow* window, int count, const char** paths)
+void	listAll()
 {
-    // std::cout << "Dropped " << count << std::endl;
-    for (int it = 0; it < count; it++)
-    {
-
-		if (strcmp(strrchr(paths[it], '.'), ".obj") == 0)
-		{
-			app._obj.push_back({paths[it], strrchr(paths[it], '/')});
-		}
-		else if (strcmp(strrchr(paths[it], '.'), ".png") == 0 || strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
-		{
-			std::string tmp;
-			if (strcmp(strrchr(paths[it], '.'), ".png") == 0)
-				tmp = "png";
-			else if (strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
-				tmp = "jpg";
-			
-			app._textures.push_back({paths[it], strrchr(paths[it], '/'), app.getImgSize(paths[it]), tmp});
-		}
-        else
-            std::cout << RED << "Error: File type not supported: " << paths[it] << RESET << std::endl;
-    }
-	
 	if (app._obj.size() > 0)
 	{
 		std::cout << "\n-----------------------------------------------------------------" << std::endl;
@@ -301,3 +101,126 @@ void	drop_callback(GLFWwindow* window, int count, const char** paths)
 		std::cout << "-----------------------------------------------------------------" << std::endl;
 	}
 }
+
+void	drop_callback(GLFWwindow* window, int count, const char** paths)
+{
+	static int i = 0;
+
+    // std::cout << "Dropped " << count << std::endl;
+	std::cout << std::endl;
+    for (int it = 0; it < count; it++)
+    {
+		if (strcmp(strrchr(paths[it], '.'), ".obj") == 0)
+		{
+			app._obj.push_back({paths[it], strrchr(paths[it], '/')});
+		}
+		else if (strcmp(strrchr(paths[it], '.'), ".png") == 0 || strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
+		{
+			std::string tmp;
+			if (strcmp(strrchr(paths[it], '.'), ".png") == 0)
+				tmp = "png";
+			else if (strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
+				tmp = "jpg";
+			
+			app._textures.push_back({paths[it], strrchr(paths[it], '/'), app.getImgSize(paths[it]), tmp});
+			app.changeTexture(app._textures.at(i++));
+		}
+        else
+            std::cout << RED << "Error: File type not supported: " << paths[it] << RESET << std::endl;
+    }
+
+	listAll();
+	
+	for (int i = 0; i < app._textures.size(); i++)
+	{
+		std::cout << GREEN << "Texture [" << i << "] : " << app._textures[i].imgName << RESET << std::endl;
+	}
+	std::cout << "Choose a texture: ";
+}
+
+// Thread to choose texture //
+void	ProgramGestion::chooseTexture()
+{
+	while (1)
+	{
+		for (int i = 0; i < _textures.size(); i++)
+		{
+			std::cout << GREEN << "Texture [" << i << "] : " << _textures[i].imgName << RESET << std::endl;
+		}
+		
+		std::cout << std::endl;
+		
+		int			nbrIndex;
+		std::string	textureIndex;
+		std::cout << BLUE << "'l' or 'L' for list all files\n" << RESET << std::endl;
+		std::cout << "Choose a texture: ";
+		std::cin >> textureIndex;
+		nbrIndex = atoi(textureIndex.c_str());
+
+		std::cout << std::endl << std::endl;
+		
+		if (textureIndex.compare("q") == 0 || textureIndex.compare("Q") == 0)
+		{
+			_quit = false;
+			return ;
+		}
+		else if (textureIndex.compare("l") == 0 || textureIndex.compare("L") == 0)
+		{
+			listAll();
+		}
+		else if ((nbrIndex < 0 || nbrIndex > _textures.size() - 1) && isdigit(textureIndex[0]) != 0)
+		{
+			std::cout << RED << "Error: Texture index out of range" << RESET << std::endl << std::endl;
+		}
+		else if (isdigit(textureIndex[0]) == 0)
+		{
+			std::cout << RED << "Error: index not numeric" << RESET << std::endl << std::endl;
+		}
+		else
+		{
+			std::cout << "Texture [" << nbrIndex << "] : " << _textures[nbrIndex].imgName << std::endl;
+			_texture = true;
+			_textureIndex = nbrIndex;
+			return ;
+		}
+	}
+}
+
+// Create texture image //
+void	ProgramGestion::changeTexture(Texture2D	texture)
+{
+	// Destroy old texture //
+	vkQueueWaitIdle(graphicsQueue);
+	
+    vkDestroyImageView(device, textureImageView, nullptr);
+    vkDestroyImage(device, textureImage, nullptr);
+    vkFreeMemory(device, textureImageMemory, nullptr);
+	vkDestroySampler(device, textureSampler, nullptr);
+	vkDestroyDescriptorPool(device, descriptorPool, nullptr);
+	
+	// Create new texture //
+	createTextureImage(texture);
+	createTextureImageView();
+	createTextureSampler();
+	createDescriptorPool();
+	createDescriptorSets();
+	createCommandBuffers();
+}
+
+// void	ProgramGestion::changeMesh(Obj mesh)
+// {
+//     // Destroy old mesh //
+//     vkQueueWaitIdle(graphicsQueue);
+
+//     vkDestroyBuffer(device, vertexBuffer, nullptr);
+//     vkFreeMemory(device, vertexBufferMemory, nullptr);
+//     vkDestroyBuffer(device, indexBuffer, nullptr);
+//     vkFreeMemory(device, indexBufferMemory, nullptr);
+
+//     // Create new mesh //
+// 	loadModel(mesh);
+//     createVertexBuffer(mesh);
+//     createIndexBuffer(mesh);
+//     createDescriptorSets();
+//     createCommandBuffers();
+// }
