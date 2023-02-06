@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 21:53:06 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/05 15:51:56 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/05 21:52:16 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,7 +410,7 @@ class ProgramGestion
 	//												Model										    		//
 	//******************************************************************************************************//
 
-		void		loadModel();
+		void		loadModel(Obj mesh);
 
 	//******************************************************************************************************//
 	//												Minimaps									    		//
@@ -472,18 +472,13 @@ class ProgramGestion
 		
 		uint							_space = 0;
 
-		Texture2D						_defaultTexture;
-
-		std::string MODEL_PATH;
-		// std::string TEXTURE_PATH;
-
-		// std::string MODEL_PATH_DROP;
-		// std::string TEXTURE_PATH_DROP;
+		// Texture2D						_defaultTexture;
 
 		std::vector<Texture2D>	_textures;
 		std::vector<Obj> 		_obj;
 		bool					_texture = false;
 		int						_textureIndex = 0;
+		int						_objIndex = 0;
 		bool					_thread = true;
 	
 	// Private Attributes //

@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 17:55:55 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/05 15:58:43 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/05 22:30:17 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,12 @@ void	ProgramGestion::initVariables(int argc, char **argv)
 	app._scale.y = 1.0f;
 	app._scale.z = 1.0f;
 
-	for (int it = 0; it < argc ; it++)
+	for (int it = 0; it < argc; it++)
 	{
+		if (strcmp(strrchr(argv[it], '.'), ".obj") == 0)
+		{
+			app._obj.push_back({argv[it], strrchr(argv[it], '/')});
+		}
 		if (strcmp(strrchr(argv[it], '.'), ".png") == 0 || strcmp(strrchr(argv[it], '.'), ".jpg") == 0)
 		{
 			std::string tmp;
@@ -44,20 +48,11 @@ void	ProgramGestion::initVariables(int argc, char **argv)
 				tmp = "jpg";
 
 			app._textures.push_back({argv[it], strrchr(argv[it], '/'), app.getImgSize(argv[it]), tmp});
-			
-			_defaultTexture.imgName = strrchr(argv[it], '/');
-			_defaultTexture.imgPath = argv[it];
-			_defaultTexture.imgSize = app.getImgSize(argv[it]);
-			_defaultTexture.imgType = tmp;
 		}
 		else if (strcmp(strrchr(argv[it], '.'), ".obj") != 0)
 			std::cout << RED << "Error: File type not supported: " << argv[it] << RESET << std::endl;
 		
 	}
-	
-
-	MODEL_PATH = argv[1];
-	// TEXTURE_PATH = argv[2];
 }
 
 //******************************************************************************************************//
@@ -113,6 +108,8 @@ void	drop_callback(GLFWwindow* window, int count, const char** paths)
 		if (strcmp(strrchr(paths[it], '.'), ".obj") == 0)
 		{
 			app._obj.push_back({paths[it], strrchr(paths[it], '/')});
+			if (count == 1)
+				app.changeMesh(app._obj.at(app._obj.size() - 1));
 		}
 		else if (strcmp(strrchr(paths[it], '.'), ".png") == 0 || strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
 		{
@@ -123,7 +120,9 @@ void	drop_callback(GLFWwindow* window, int count, const char** paths)
 				tmp = "jpg";
 			
 			app._textures.push_back({paths[it], strrchr(paths[it], '/'), app.getImgSize(paths[it]), tmp});
-			app.changeTexture(app._textures.at(i++));
+			// app._textureIndex = app._textures.size() - 1;
+			if (count == 1)
+				app.changeTexture(app._textures.at(app._textures.size() - 1));
 		}
         else
             std::cout << RED << "Error: File type not supported: " << paths[it] << RESET << std::endl;
@@ -207,20 +206,21 @@ void	ProgramGestion::changeTexture(Texture2D	texture)
 	createCommandBuffers();
 }
 
-// void	ProgramGestion::changeMesh(Obj mesh)
-// {
-//     // Destroy old mesh //
-//     vkQueueWaitIdle(graphicsQueue);
+void	ProgramGestion::changeMesh(Obj mesh)
+{
+	// Clear previous mesh data //
+    vkQueueWaitIdle(graphicsQueue);
+    vkFreeMemory(device, vertexBufferMemory, nullptr);
+    vkDestroyBuffer(device, vertexBuffer, nullptr);
+    vkFreeMemory(device, indexBufferMemory, nullptr);
+    vkDestroyBuffer(device, indexBuffer, nullptr);
 
-//     vkDestroyBuffer(device, vertexBuffer, nullptr);
-//     vkFreeMemory(device, vertexBufferMemory, nullptr);
-//     vkDestroyBuffer(device, indexBuffer, nullptr);
-//     vkFreeMemory(device, indexBufferMemory, nullptr);
+    vertices.clear();
+    indices.clear();
 
-//     // Create new mesh //
-// 	loadModel(mesh);
-//     createVertexBuffer(mesh);
-//     createIndexBuffer(mesh);
-//     createDescriptorSets();
-//     createCommandBuffers();
-// }
+    // Load new mesh data //
+    loadModel(mesh);
+    createVertexBuffer();
+    createIndexBuffer();
+    createCommandBuffers();
+}
