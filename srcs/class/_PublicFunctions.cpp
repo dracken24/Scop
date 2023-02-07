@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 17:55:55 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/05 22:30:17 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/06 15:42:47 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,11 @@ void	ProgramGestion::initVariables(int argc, char **argv)
 	app._rotate.y = 0.0f;
 	app._rotate.z = 0.0f;
 
-	app._scale.x = 1.0f;
-	app._scale.y = 1.0f;
-	app._scale.z = 1.0f;
-
 	for (int it = 0; it < argc; it++)
 	{
 		if (strcmp(strrchr(argv[it], '.'), ".obj") == 0)
 		{
-			app._obj.push_back({argv[it], strrchr(argv[it], '/')});
+			app._obj.push_back({argv[it], strrchr(argv[it], '/'), app.getObjSize(argv[it])});
 		}
 		if (strcmp(strrchr(argv[it], '.'), ".png") == 0 || strcmp(strrchr(argv[it], '.'), ".jpg") == 0)
 		{
@@ -53,6 +49,12 @@ void	ProgramGestion::initVariables(int argc, char **argv)
 			std::cout << RED << "Error: File type not supported: " << argv[it] << RESET << std::endl;
 		
 	}
+
+	_far = app.getMaxObjSize(app._obj.at(0)) * 1.2f;
+	_scale.x = _far;
+	_scale.y = _far;
+	_scale.z = _far;
+	_zoomModifier = _far / 10;
 }
 
 //******************************************************************************************************//
@@ -80,6 +82,9 @@ void	listAll()
 		{
 			std::cout << YELLOW << "\nDropped Obj Name  [" << k << "]  : " << app._obj[k].objName << std::endl;
 			std::cout << "Dropped Obj Path  [" << k << "]  : " << app._obj[k].objPath << std::endl << std::endl;
+			std::cout << "Dropped Obj X [" << k << "]      : " << app._obj[k].objSize.x << std::endl;
+			std::cout << "Dropped Obj Y [" << k << "]      : " << app._obj[k].objSize.y << std::endl;
+			std::cout << "Dropped Obj Z [" << k << "]      : " << app._obj[k].objSize.z << RESET << std::endl << std::endl;
 		}
 	}
 	if (app._textures.size() > 0)
@@ -107,9 +112,19 @@ void	drop_callback(GLFWwindow* window, int count, const char** paths)
     {
 		if (strcmp(strrchr(paths[it], '.'), ".obj") == 0)
 		{
-			app._obj.push_back({paths[it], strrchr(paths[it], '/')});
+			Vector3 tmp = app.getObjSize(paths[it]);
+			
+			app._obj.push_back({paths[it], strrchr(paths[it], '/'), tmp});
 			if (count == 1)
+			{
+				app._far = app.getMaxObjSize(app._obj.at(app._obj.size() - 1)) * 1.2f;
+				app._scale.x = app._far;
+				app._scale.y = app._far;
+				app._scale.z = app._far;
+				app._zoomModifier = app._far / 10;
 				app.changeMesh(app._obj.at(app._obj.size() - 1));
+				app._objIndex = app._obj.size() - 1;
+			}
 		}
 		else if (strcmp(strrchr(paths[it], '.'), ".png") == 0 || strcmp(strrchr(paths[it], '.'), ".jpg") == 0)
 		{
