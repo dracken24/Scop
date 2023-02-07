@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 22:20:08 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/06 15:34:06 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/06 23:55:21 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -484,6 +484,7 @@ bool ProgramGestion::checkDeviceExtensionSupport(VkPhysicalDevice device)
 	// Check if the extension is supported //
 	for (const auto &extension : availableExtensions)
 	{
+		// std::cout << "Extension supported : " << extension.extensionName << std::endl;
 		requiredExtensions.erase(extension.extensionName);
 	}
 

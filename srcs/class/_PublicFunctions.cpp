@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/04 17:55:55 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/06 15:42:47 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/06 23:47:08 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	ProgramGestion::initVariables(int argc, char **argv)
 		}
 		else if (strcmp(strrchr(argv[it], '.'), ".obj") != 0)
 			std::cout << RED << "Error: File type not supported: " << argv[it] << RESET << std::endl;
-		
 	}
 
 	_far = app.getMaxObjSize(app._obj.at(0)) * 1.2f;
