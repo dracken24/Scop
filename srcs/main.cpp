@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 22:14:08 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/06 23:25:55 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/07 14:39:16 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	threadChooseTexture()
 	if (app._thread == true && app._quit == true)
 	{
 		// std::cout << "Thread" << std::endl;
-		std::thread	chooseTextureThread(std::bind(&ProgramGestion::chooseTexture, &app));
+		std::thread	chooseTextureThread(std::bind(&ProgramGestion::choice, &app));
 		chooseTextureThread.detach();
 		app._thread = false;
 	}
@@ -30,6 +30,15 @@ void	threadChooseTexture()
 	{
 		// std::cout << "Texture" << std::endl;
 		app.changeTexture(app._textures.at(app._textureIndex));
+		app._texture = false;
+		app._mesh = false;
+		app._thread = true;
+	}
+	if (app._mesh == true)
+	{
+		// std::cout << "Texture" << std::endl;
+		app.changeMesh(app._obj.at(app._objIndex));
+		app._mesh = false;
 		app._texture = false;
 		app._thread = true;
 	}
