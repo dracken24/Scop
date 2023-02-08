@@ -16,6 +16,22 @@
             "cppStandard": "c++14",
             "intelliSenseMode": "linux-clang-x64",
             "compileCommands": "/home/dracken24/Documents/Vulkan/source/shaderc/src/build/compile_commands.json"
+        },
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/Users/nadesjar/Desktop/prog/vcpkg/packages/glfw3_x64-osx/include",
+                "/Users/nadesjar/Desktop/prog/42_en_cours/Scop/lib/glfw/include/GLFW"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/System/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "macos-clang-x64"
         }
     ],
     "version": 4
