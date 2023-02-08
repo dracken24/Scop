@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 04:13:00 by nadesjar          #+#    #+#             */
-/*   Updated: 2023/02/08 08:55:54 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/08 12:02:50 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,26 @@
 
 #include "../includes/class/Scop.hpp"
 
-Scop	scop;
+Scop	scop("BANKAI");
+
+int		events(void)
+{
+	glfwSetKeyCallback(scop._window, key_callback);	                // Key Hook //
+	glfwSetMouseButtonCallback(scop._window, mouse_button_callback);	// Mouse Hook //;
+	glfwSetScrollCallback(scop._window, scroll_callback);	            // Scroll Hook //;
+	glfwSetCursorPosCallback(scop._window, cursor_position_callback);	// Cursor Hook //;
+	// glfwSetDropCallback(app.window, drop_callback);				// Drop files into window //
+	
+	return (0);
+}
 
 void    mainLoop()
 {
-	while (glfwWindowShouldClose(scop.window) != true)
+	while (glfwWindowShouldClose(scop._window) != true && scop._quit == true )
 	{
 		glfwPollEvents();
 
-		// events(window);
+		events();
 		
 		// drawFrame();
 		
@@ -36,28 +47,11 @@ void    mainLoop()
 	}
 }
 
-// Callback //
-static void framebufferResizeCallback(GLFWwindow *window, int width, int height)
+int     main(int argc, char **argv)
 {
-	auto app = reinterpret_cast<Scop *>(glfwGetWindowUserPointer(window));
-	scop.framebufferResized = true;
-}
-
-int     main(void)
-{
-	std::cout << scop.ff << std::endl;
-
 	try
 	{
-		// app.initVariables(argc, argv);
-		glfwInit();
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-		scop.window = glfwCreateWindow(WIDTH, HEIGHT, "BANKAI", nullptr, nullptr);
-
-		glfwSetWindowUserPointer(scop.window, nullptr);
-		glfwSetFramebufferSizeCallback(scop.window, framebufferResizeCallback);
 
 		mainLoop();
 
