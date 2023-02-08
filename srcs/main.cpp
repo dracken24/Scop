@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nadesjar <dracken24@gmail.com>             +#+  +:+       +#+        */
+/*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 04:13:00 by nadesjar          #+#    #+#             */
-/*   Updated: 2023/02/08 04:48:08 by nadesjar         ###   ########.fr       */
+/*   Updated: 2023/02/08 05:09:20 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,22 +19,22 @@
 
 Scop	scop;
 
-// void    mainLoop()
-// {
-// 	while (app._quit == true && glfwWindowShouldClose(app.window) != true)
-// 	{
-// 		glfwPollEvents();
+void    mainLoop()
+{
+	while (glfwWindowShouldClose(scop.window) != true)
+	{
+		glfwPollEvents();
 
-// 		events(app.window); // Events //
-// 		onKeyPress();       // Key gestion //
+		// events(window);
+		
+		// drawFrame();
+		
+		// useFPS();	// Wait for 16.666 ms to have 60 fps //
 
-// 		threadChooseTexture(); // Thread to choose texture //
-
-// 		app.drawFrame(); // Draw on screen //
-
-// 		app.useFPS(); // FPS gestion //
-// 	}
-// }
+		// std::cout << "FPS: " << i << std::endl;
+		// i++;
+	}
+}
 
 // Callback //
 static void framebufferResizeCallback(GLFWwindow *window, int width, int height)
@@ -59,7 +59,7 @@ int     main(void)
 		glfwSetWindowUserPointer(scop.window, nullptr);
 		glfwSetFramebufferSizeCallback(scop.window, framebufferResizeCallback);
 
-		// mainLoop();
+		mainLoop();
 
 	}
 	catch (const std::exception &e)

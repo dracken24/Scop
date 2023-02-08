@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Scop.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nadesjar <dracken24@gmail.com>             +#+  +:+       +#+        */
+/*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 04:35:16 by nadesjar          #+#    #+#             */
-/*   Updated: 2023/02/08 04:40:27 by nadesjar         ###   ########.fr       */
+/*   Updated: 2023/02/08 05:06:04 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,22 @@
 
 class Scop
 {
-    public:
-        Scop();
-        ~Scop();
-        Scop(Scop const &src);
-        Scop	&operator=(Scop const &rhs);
+	public:
+		Scop();
+		Scop(Scop const &src);
+		~Scop();
+		Scop	&operator=(Scop const &rhs);
 
-        void    mainLoop();
-        static void    framebufferResizeCallback(GLFWwindow *window, int width, int height);
-        int     main(void);
+		// void    mainLoop();
+		// static void    framebufferResizeCallback(GLFWwindow *window, int width, int height);
+		// int     main(void);
 
-    public:
-        GLFWwindow	*window;
-        bool framebufferResized = false; //- Stock framebuffer resized -//
+	public:
+		GLFWwindow	*window;
+		bool framebufferResized = false; //- Stock framebuffer resized -//
 
-    private:
-        
+	private:
+		
 };
 
 #endif

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nadesjar <dracken24@gmail.com>             +#+  +:+       +#+         #
+#    By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/23 13:22:35 by nadesjar          #+#    #+#              #
-#    Updated: 2023/02/08 04:47:25 by nadesjar         ###   ########.fr        #
+#    Updated: 2023/02/08 05:10:21 by dracken24        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,27 +19,28 @@ P_SRCS			= ./srcs/
 P_CLASS			= ./srcs/class/
 
 FILES			= $(P_SRCS)main.cpp \
+				$(P_SRCS)Scop.cpp \
 
 OBJS			= $(patsubst $(P_SRCS)%.cpp, $(P_OBJS)%.o, $(FILES))
 
 CC				= c++
 
-CFLAGS			= -Wall -Wextra -Werror -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -std=c++17
+# CFLAGS			= -Wall -Wextra -Werror -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -std=c++17
 
-# CFLAGS			= -std=c++17 -g -I$(VULKAN_SDK_PATH)/include -I$(STB_INCLUDE_PATH) -I$(TINYOBJ_INCLUDE_PATH) \
-# 				-Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable
+# CFLAGS			= -std=c++17 -g -I$(VULKAN_SDK_PATH)/include -I$(STB_INCLUDE_PATH) -I$(TINYOBJ_INCLUDE_PATH) 
+CFLAGS				= -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable
 
-LDFLAGS			= -lglfw3 -framework AppKit -framework OpenGL -framework IOKit -framework CoreVideo
-# LDFLAGS 		= -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
+# LDFLAGS			= -lglfw3 -framework AppKit -framework OpenGL -framework IOKit -framework CoreVideo
+LDFLAGS 		= -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 
-NAME			= DrackenLib
+NAME			= Scop
 
 # ------------------------------- Compilation -------------------------------- #
 
 all: signat msg_in $(NAME) msg_out execute
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) /Users/nadesjar/Desktop/prog/42_en_cours/Scop/lib/glfw/include -o $(NAME) $(OBJS) $(LDFLAGS) 
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS) 
 
 $(P_OBJS)%.o:	$(P_SRCS)%.cpp
 	@mkdir -p $(P_OBJS)
@@ -62,15 +63,15 @@ git:
 # --------------------------------- Messages --------------------------------- #
 
 msg_in:
-	@echo $L"COMPILATION DE DrackenLib EN COURS..."$W
+	@echo $L"COMPILATION DE Scop EN COURS..."$W
 
 msg_out:
-	@echo $L"\nDrackenLib READY !!!\n"$W
+	@echo $L"\nScop READY !!!\n"$W
 
 signat:
 	@echo "$G\n\|/~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~\|/"
 	@echo " |             ---------------------------------------------             |"
-	@echo " |             *--*  $LPROJET: DrackenLib  PAR: NADESJAR$G  *--*             |"
+	@echo " |             *--*    $LPROJET:Scop     PAR: NADESJAR$G    *--*             |"
 	@echo " |             ---------------------------------------------             |"
 	@echo "/|\~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~---~/|\ \n$W"
 	
