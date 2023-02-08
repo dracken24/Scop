@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/28 22:20:08 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/06 23:55:21 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/08 00:10:57 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1057,7 +1057,7 @@ void ProgramGestion::createGraphicsPipeline(void)
 	rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;	// Create the rasterizer //
 	rasterizer.depthClampEnable = VK_FALSE;											// Disable the depth clamp //
 	rasterizer.rasterizerDiscardEnable = VK_FALSE;									// Disable the rasterizer discard //
-	rasterizer.polygonMode = VK_POLYGON_MODE_FILL;									// Set the polygon mode //
+	rasterizer.polygonMode = _modeFil;												// Set the polygon mode //
 	rasterizer.lineWidth = 1.0f;													// Set the line width //
 	rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;									// Set the cull mode //
 	rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;							// Set the front face //
