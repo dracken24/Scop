@@ -5,47 +5,67 @@
 #                                                     +:+ +:+         +:+      #
 #    By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/08/23 13:22:35 by nadesjar          #+#    #+#              #
-#    Updated: 2023/02/08 05:10:21 by dracken24        ###   ########.fr        #
+#    Created: 2023/02/08 09:13:13 by dracken24         #+#    #+#              #
+#    Updated: 2023/02/08 09:16:19 by dracken24        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-VULKAN_SDK_PATH			= /home/dracken24/Documents/Vulkan/x86_64
-STB_INCLUDE_PATH		= /home/dracken24/Documents/myPackages/stb
-TINYOBJ_INCLUDE_PATH 	= /home/dracken24/Documents/myPackages/vcpkg/packges/tinyobjloader_x64-linux
+ifeq ($(OS),Windows_NT)
+    TARGET = windows
+else ifeq ($(shell uname), Darwin)
+   	TARGET = mac
+else
+    TARGET = linux
+endif
+
+# ------------------------------- Variables --------------------------------- #
+
+INCLUDE_PATH	= ./includes/
 
 P_OBJS 			= ./objs/
 P_SRCS			= ./srcs/
 P_CLASS			= ./srcs/class/
 
 FILES			= $(P_SRCS)main.cpp \
-				$(P_SRCS)Scop.cpp \
+				$(P_CLASS)Scop.cpp \
 
 OBJS			= $(patsubst $(P_SRCS)%.cpp, $(P_OBJS)%.o, $(FILES))
 
 CC				= c++
 
-# CFLAGS			= -Wall -Wextra -Werror -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -std=c++17
-
-# CFLAGS			= -std=c++17 -g -I$(VULKAN_SDK_PATH)/include -I$(STB_INCLUDE_PATH) -I$(TINYOBJ_INCLUDE_PATH) 
-CFLAGS				= -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable
-
-# LDFLAGS			= -lglfw3 -framework AppKit -framework OpenGL -framework IOKit -framework CoreVideo
-LDFLAGS 		= -lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
-
 NAME			= Scop
 
 # ------------------------------- Compilation -------------------------------- #
 
-all: signat msg_in $(NAME) msg_out execute
+all: signat msg_in $(TARGET) $(NAME) msg_out execute
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LDFLAGS) 
+	@$(CC) -o $(NAME) $(OBJS) $(CFLAGS)
 
-$(P_OBJS)%.o:	$(P_SRCS)%.cpp
-	@mkdir -p $(P_OBJS)
-	@$(CC) $(CFLAGS) -I. -c $< -o $@ $(LDFLAGS)
+# ---------------------------- Recompile Headers ----------------------------- #
+
+$(P_OBJS)class/Scop.o: $(P_SRCS)class/Scop.cpp $(INCLUDE_PATH)class/Scop.hpp
+	@mkdir -p $(P_OBJS)class
+	@$(CC) -I $(CFLAGS) -c $< -o $@
 	@printf "$G■"
+
+$(P_OBJS)main.o: $(P_SRCS)main.cpp $(INCLUDE_PATH)class/Scop.hpp
+	@mkdir -p $(P_OBJS)
+	@$(CC) -I $(CFLAGS) -c $< -o $@
+	@printf "$C■"
+
+# --------------------------------- Init IOS --------------------------------- #
+
+windows:
+    # Commands to build for Windows
+
+mac:
+CFLAGS	= -Wall -Wextra -Werror -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -std=c++17 -g \
+		-lglfw3 -framework AppKit -framework OpenGL -framework IOKit -framework CoreVideo
+
+linux:
+CFLAGS	= -Wall -Wextra -Werror -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable -std=c++17 -g \
+		-lglfw -lvulkan -ldl -lpthread -lX11 -lXxf86vm -lXrandr -lXi
 
 # --------------------------------- Execute ---------------------------------- #
 
@@ -93,6 +113,5 @@ fclean: clean
 	@rm -f $(NAME)
 
 re: fclean all
-
 
 .PHONY: all msg_in msg_out clean fclean re signat git execute

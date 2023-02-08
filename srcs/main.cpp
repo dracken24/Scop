@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 04:13:00 by nadesjar          #+#    #+#             */
-/*   Updated: 2023/02/08 05:09:20 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/08 08:55:54 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // #include <stdexcept>
 // #include <GLFW/glfw3.h>
 
-#include "Scop.hpp"
+#include "../includes/class/Scop.hpp"
 
 Scop	scop;
 
@@ -45,7 +45,7 @@ static void framebufferResizeCallback(GLFWwindow *window, int width, int height)
 
 int     main(void)
 {
-	
+	std::cout << scop.ff << std::endl;
 
 	try
 	{
