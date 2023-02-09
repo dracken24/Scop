@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 04:13:00 by nadesjar          #+#    #+#             */
-/*   Updated: 2023/02/08 12:02:50 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/08 20:45:39 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 // #include <GLFW/glfw3.h>
 
 #include "../includes/class/Scop.hpp"
+#include "../includes/class/Mesh.hpp"
 
 Scop	scop("BANKAI");
 
@@ -51,7 +52,13 @@ int     main(int argc, char **argv)
 {
 	try
 	{
-
+		scop.init();
+		scop.loadMesh(argv[1]);
+		scop.loadTexture(argv[2], 0);
+		std::cout << "Texture Path: " << scop.getTexture(0).getPath() << std::endl;
+		std::cout << "Texture Name: " << scop.getTexture(0).getName() << std::endl;
+		
+		std::cout << "Img: " << scop.getTexture(0).getTexture()->img << std::endl;
 
 		mainLoop();
 

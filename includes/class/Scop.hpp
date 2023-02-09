@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 04:35:16 by nadesjar          #+#    #+#             */
-/*   Updated: 2023/02/08 11:57:50 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/08 19:40:32 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define SCOP_HPP
 
 # include "Mesh.hpp"
+# include "Texture.hpp"
 
 #define WIDTH 1500
 #define HEIGHT 920
@@ -33,19 +34,31 @@ class Scop
 		Scop	&operator=(Scop const &rhs);
 
 	//******************************************************************************************************//
+	//												Getters										    		//
+	//******************************************************************************************************//
+	
+	std::vector<GLfloat>	getVertices() const;
+	std::vector<Mesh>		getMesh() const;
+	Texture					getTexture(int i) const;
+	
+	//******************************************************************************************************//
 	//											Public Functions								    		//
 	//******************************************************************************************************//
 
 	public:
-		void	initVariables();
+		// void	initVariables();
+		void	init();
 		void	loadMesh(std::string const &path);
+		void	loadTexture(std::string const &path, int i);
 
 	//******************************************************************************************************//
 	//											Private Functions								    		//
 	//******************************************************************************************************//
 	
 	private:
-		GLfloat	*saveMesh	(GLfloat *array, char *line);
+		void	changeVector3ToGLfloat(std::vector<Vector3> &vertices);
+		void	centerAxix(std::vector<GLfloat>	*_vertices, int verLen);
+		// GLfloat	*saveMesh	(GLfloat *array, char *line);
 
 	//******************************************************************************************************//
 	//											Public Variables								    		//
@@ -69,8 +82,11 @@ class Scop
 	//******************************************************************************************************//
 	
 	private:
-		std::vector<Mesh>	_mesh;
-		
+		std::vector<Mesh>		_mesh;
+		std::vector<Texture>	_textures;
+		std::vector<GLfloat>	_vertices;
+		std::vector<GLuint>		_indices;
+		// std::vector<GLfloat>	_vertices;
 };
 
 //******************************************************************************************************//
@@ -87,5 +103,8 @@ void	onKeyPress(void);
 
 // Events //
 int		events(void);
+
+// Utils //
+std::vector<char>   readFile(const std::string &filename);
 
 #endif

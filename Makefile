@@ -6,7 +6,7 @@
 #    By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/08 09:13:13 by dracken24         #+#    #+#              #
-#    Updated: 2023/02/08 11:51:39 by dracken24        ###   ########.fr        #
+#    Updated: 2023/02/08 20:20:17 by dracken24        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,6 +72,11 @@ $(P_OBJS)others/keyGestion.o: $(P_SRCS)others/keyGestion.cpp $($(INCLUDE_PATH)ut
 	@$(CC) -I $(CFLAGS) -c $< -o $@
 	@printf "$G■"
 
+$(P_OBJS)others/keyGesUtilstion.o: $(P_SRCS)others/Utils.cpp $($(INCLUDE_PATH)utils.hpp)
+	@mkdir -p $(P_OBJS)others
+	@$(CC) -I $(CFLAGS) -c $< -o $@
+	@printf "$G■"
+
 # --------------------------------- Init IOS --------------------------------- #
 
 windows:
@@ -88,7 +93,7 @@ CFLAGS	= -Wall -Wextra -Werror -Wno-unused-but-set-variable -Wno-unused-paramete
 # --------------------------------- Execute ---------------------------------- #
 
 execute:
-	@./$(NAME)
+	@./$(NAME) ./test/42.obj ./ichigo.bmp
 
 # ----------------------------------- Git ------------------------------------ #
 

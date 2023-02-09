@@ -6,7 +6,7 @@
 /*   By: dracken24 <dracken24@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 10:33:18 by dracken24         #+#    #+#             */
-/*   Updated: 2023/02/08 11:52:16 by dracken24        ###   ########.fr       */
+/*   Updated: 2023/02/08 13:40:11 by dracken24        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <vector>
 # include <string>
 # include <iostream>
+# include <ostream>
 # include <fstream>
 # include <sstream>
 # include <GL/glew.h>
@@ -44,6 +45,13 @@
 # define MAGENTA "\033[35m"
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
+
+typedef struct Vector3glf
+{
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
+}   Vector3glf;
 
 typedef struct Vector3
 {
